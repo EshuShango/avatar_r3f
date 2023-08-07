@@ -6,16 +6,15 @@ import { useControls } from "leva";
 export const Experience = () => {
   const { animation } = useControls({
     animation: {
-    value: "Sitting",
-    options: ["Sitting", "Typing", "Falling", "Standing", "Looking"],
+      value: "Sitting",
+      options: ["Sitting", "Typing", "Falling", "Standing", "Looking"],
     },
   });
   return (
     <>
-      <OrbitControls  />
-       <group position-y={-1}>
-
-      <Avatar animation={animation}/>  
+      <OrbitControls />
+      <group position-y={-1}>
+        <Avatar animation={animation} />
       </group>
       <ambientLight intensity={3.14} />
     </>
