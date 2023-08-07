@@ -15,7 +15,7 @@ export const Experience = () => {
       <OrbitControls  />
        <group position-y={-1}>
 
-      <Avatar animation={animation.options}/>  
+      <Avatar animation={animation}/>  
       </group>
       <ambientLight intensity={3.14} />
     </>

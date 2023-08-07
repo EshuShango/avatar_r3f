@@ -21,10 +21,10 @@ export const Avatar = (props) => {
   // load the model
   const { nodes, materials } = useGLTF("model/Portfolio_Avatar.glb");
   // load the animations
-  const { animations: sitting } = useFBX("animations/Male Sitting Pose.fbx");
+  const { animations: sitting } = useFBX("animations/Sitting.fbx");
   const { animations: typing } = useFBX("animations/Typing.fbx");
-  const { animations: falling } = useFBX("animations/Falling Idle.fbx");
-  const { animations: standing } = useFBX("animations/Standing Idle.fbx");
+  const { animations: falling } = useFBX("animations/Falling.fbx");
+  const { animations: standing } = useFBX("animations/Standing.fbx");
   const { animations: looking } = useFBX("animations/Looking.fbx");
 
   sitting[0].name = "Sitting";
@@ -33,9 +33,12 @@ export const Avatar = (props) => {
   standing[0].name = "Standing";
   looking[0].name = "Looking";
 
-  const { actions } = useAnimations(typing, group);
+  const { actions } = useAnimations(
+    [sitting[0], standing[0], falling[0], looking[0], typing[0]],
+    group
+  );
   // play animation
-  // console.log(actions)
+
   // console.warn(actions)
   useFrame((state) => {
     if (headFollow) {
@@ -47,16 +50,19 @@ export const Avatar = (props) => {
       // use the 'target' vector as needed
     }
   });
-  // console.log(actions)
-  console.warn(actions)
+
+  // console.warn(actions)
   useEffect(() => {
-    if (actions[animation]) {
-      actions[animation].reset().play();
-    } else {
-      console.warn(`Animation '${animation}' not found in actions.`);
-    }
-  }, []);
-  
+    // if (actions[animation]) {
+    //   actions[animation].reset().play();
+    // } else {
+    //   console.warn(`Animation '${animation}' not found in actions.`);
+    // }
+    actions[animation]
+      ? (actions[animation].reset().fadeIn(0.5).play(),
+        () => actions[animation].reset().fadeIn(0.5).stop())
+      : console.warn(`Animation '${animation}' not found in actions.`);
+  }, [animation]);
 
   return (
     <group {...props} dispose={null} ref={group}>
