@@ -7,6 +7,7 @@ import React, { useRef, useEffect } from "react";
 import { useAnimations, useFBX, useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+
 import { useControls } from "leva";
 
 export const Avatar = (props) => {
@@ -26,15 +27,16 @@ export const Avatar = (props) => {
   const { animations: standing } = useFBX("animations/Standing Idle.fbx");
   const { animations: looking } = useFBX("animations/Looking.fbx");
 
-  sitting[0].name = "sitting";
-  typing[0].name = "typing";
-  falling[0].name = "falling";
-  standing[0].name = "standing";
-  looking[0].name = "looking";
+  sitting[0].name = "Sitting";
+  typing[0].name = "Typing";
+  falling[0].name = "Falling";
+  standing[0].name = "Standing";
+  looking[0].name = "Looking";
 
   const { actions } = useAnimations(typing, group);
   // play animation
-
+  // console.log(actions)
+  // console.warn(actions)
   useFrame((state) => {
     if (headFollow) {
       group.current.getObjectByName("Head").lookAt(state.camera.position);
@@ -45,10 +47,16 @@ export const Avatar = (props) => {
       // use the 'target' vector as needed
     }
   });
-
+  // console.log(actions)
+  console.warn(actions)
   useEffect(() => {
-    actions.animation.reset().play();
-  }, [actions.animation]);
+    if (actions[animation]) {
+      actions[animation].reset().play();
+    } else {
+      console.warn(`Animation '${animation}' not found in actions.`);
+    }
+  }, []);
+  
 
   return (
     <group {...props} dispose={null} ref={group}>
