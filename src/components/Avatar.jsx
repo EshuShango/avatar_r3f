@@ -12,9 +12,10 @@ import { useControls } from "leva";
 
 export const Avatar = (props) => {
   const { animation } = props;
-  const { headFollow, cursorFollow } = useControls({
+  const { headFollow, cursorFollow, wireframe } = useControls({
     headFollow: { value: false },
     cursorFollow: { value: false },
+    wireframe: { value: false },
   });
   // group of objects that make up the Avatar
   const group = useRef();
@@ -53,24 +54,19 @@ export const Avatar = (props) => {
 
   // console.warn(actions)
   useEffect(() => {
-    // if (actions[animation]) {
-    //   actions[animation].reset().play();
-    // } else {
-    //   console.warn(`Animation '${animation}' not found in actions.`);
-    // }
-    // actions && actions[animation]
-    //   ? (actions[animation].reset().fadeIn(0.5).play(),
-    //     () => actions[animation].reset().fadeOut(0.5).stop())
-    //   : console.warn(`Animation '${animation}' not found in actions.`);
-
-    const currentAction = actions[animation];
-
-     currentAction
-      ? currentAction.reset().fadeIn(0.5).play()
+    const curAction = actions[animation];
+    curAction
+      ? curAction.reset().fadeIn(0.5).play()
       : (console.warn(`Animation '${animation}' not found in actions.`),
-        console.log(currentAction));
-       return () => currentAction.reset().fadeOut(0.5)
+        console.log(curAction));
+    return () => curAction.reset().fadeOut(0.5);
   }, [animation]);
+
+  useEffect(() => {
+    Object.values(materials).forEach((mat) => {
+      mat.wireframe = wireframe;
+    });
+  });
 
   return (
     <group {...props} dispose={null} ref={group}>
